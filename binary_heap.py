@@ -5,7 +5,11 @@
 #   - O filho esquerdo na posição: 2i + 1
 #   - O filho direito na posição: 2i + 2
 
-# Ultimo nó com filhos: len(self.heap) // 2 - 1 
+# Ultimo nó com filhos: len(self.heap) // 2 - 1
+
+import matplotlib.pyplot as plt
+import networkx as nx
+
 
 class BinaryHeap:
     def __init__(self, array=None):
@@ -77,7 +81,7 @@ class BinaryHeap:
         # construindo o max-heap
         for i in range(len(self.heap) // 2 - 1, -1, -1):
             self._heapify_down(i)
-        
+
         # removendo e ordenando
         sorted_list = []
         while len(self.heap) > 0:
@@ -103,5 +107,34 @@ class BinaryHeap:
             self._heapify_down(index)
         self.display_heap()
 
+    # https://networkx.org/documentation/stable/reference/drawing.html
+    # https://networkx.org/documentation/stable/reference/classes/digraph.html
+    # https://networkx.org/documentation/stable/reference/generated/networkx.drawing.layout.spring_layout.html#
     def display_heap_graph(self):
-        print("NADA POR ENQUANTO")
+        """Exibir graficamente o binary heap"""
+        G = nx.DiGraph()
+
+        for i in range(len(self.heap)):
+            G.add_node(i, label=self.heap[i])
+            left_child = 2 * i + 1
+            right_child = 2 * i + 2
+
+            if left_child < len(self.heap):
+                G.add_edge(i, left_child)
+            if right_child < len(self.heap):
+                G.add_edge(i, right_child)
+
+        pos = nx.spring_layout(G, k=2, iterations=200, threshold=1e-4)
+
+        labels = nx.get_node_attributes(G, "label")
+        nx.draw(
+            G,
+            pos,
+            with_labels=True,
+            node_size=500,
+            node_color="lightgreen",
+            font_size=12,
+            font_weight="bold",
+            labels=labels,
+        )
+        plt.show()
