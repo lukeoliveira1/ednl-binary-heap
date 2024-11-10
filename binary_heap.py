@@ -14,6 +14,7 @@ import networkx as nx
 class BinaryHeap:
     def __init__(self, array=None):
         self.heap = array if array else []
+        self.fig, self.ax = plt.subplots()  
 
     def _swap(self, index, parent):
         """Troca as posições"""
@@ -22,6 +23,14 @@ class BinaryHeap:
     def _is_bigger(self, i, j):
         """Confere se um valor é maior do que outro dentro do heap"""
         return True if self.heap[i] > self.heap[j] else False
+    
+    def _swap_copy(self, index, parent, heap):
+        """Troca as posições"""
+        heap[index], heap[parent] = heap[parent], heap[index]
+
+    def _is_bigger_copy(self, i, j, heap):
+        """Confere se um valor é maior do que outro dentro do heap"""
+        return True if heap[i] > heap[j] else False
 
     def display_heap(self):
         """Exibe o estado atual do heap."""
@@ -32,6 +41,7 @@ class BinaryHeap:
         self.heap.append(new_value)
         self._heapify_up(len(self.heap) - 1)
         self.display_heap()
+        self.display_heap_graph()
 
     def _heapify_up(self, index):
         """Reorganiza o heap subindo o valor inserido para a posição correta."""
@@ -76,19 +86,41 @@ class BinaryHeap:
                 # se o maior for o pai
                 break
 
+    def _heapify_down_copy(self, index, heap):
+        """Reorganiza o heap descendo o valor para a posição correta."""
+        n = len(self.heap)
+        while True:
+            left_child = 2 * index + 1
+            right_child = 2 * index + 2
+            largest = index  # índice do maior valor entre o nó atual e seus filhos.
+
+            if left_child < n and self._is_bigger_copy(left_child, largest, heap):
+                largest = left_child
+            if right_child < n and self._is_bigger_copy(right_child, largest, heap):
+                largest = right_child
+            if largest != index:
+                self._swap_copy(index, largest, heap)
+                index = largest
+            else:
+                # se o maior for o pai
+                break
+
     def heapsort(self):
         """Realiza a ordenação do heap e exibe o estado após cada remoção."""
         # construindo o max-heap
-        for i in range(len(self.heap) // 2 - 1, -1, -1):
-            self._heapify_down(i)
+        copy_heap = self.heap[:] # [:] cria uma referência
+        n = len(copy_heap)
 
-        # removendo e ordenando
-        sorted_list = []
-        while len(self.heap) > 0:
-            sorted_list.append(self.remove())
+        for i in range(n // 2 - 1, -1, -1):
+            self._heapify_down_copy(i, copy_heap) # arranjar
 
-        self.heap = sorted_list
-        print("Heap ordenado: ", self.heap)
+        # ordenando
+        for i in range(n - 1, -1, -1):
+            self._swap_copy(0, i, copy_heap)
+
+            self._heapify_down_copy(0, copy_heap)
+
+        print("Heap ordenado: ", copy_heap)
 
     def get_high_priority(self):
         """Retorna o elemento de alta prioridade (raiz do heap)."""
@@ -124,6 +156,8 @@ class BinaryHeap:
             if right_child < len(self.heap):
                 G.add_edge(i, right_child)
 
+        self.ax.clear()  
+
         pos = nx.spring_layout(G, k=2, iterations=200, threshold=1e-4)
 
         labels = nx.get_node_attributes(G, "label")
@@ -136,5 +170,7 @@ class BinaryHeap:
             font_size=12,
             font_weight="bold",
             labels=labels,
+            ax=self.ax  
         )
-        plt.show()
+        plt.draw()  
+        plt.pause(1)  
