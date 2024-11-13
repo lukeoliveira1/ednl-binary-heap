@@ -13,6 +13,10 @@ def test_one():
         print(f"Inserindo: {value}")
         heap.insert(value)
 
+    print("\n--------Ordenando-----------")
+    heap.arrange(heap.heap)
+    heap.display_heap()
+
     print("\n---------Alteração de Prioridade--------")
     # 2. Alteração de Prioridade
     print("Alterando prioridade do índice 3 para 50")
@@ -36,8 +40,6 @@ def test_one():
     print("\n--------Get High Priority:--------")
     heap.get_high_priority()
 
-    heap.display_heap_graph()
-
 
 def test_two():
     data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -50,6 +52,10 @@ def test_two():
     for value in data:
         print(f"Inserindo: {value}")
         heap.insert(value)
+
+    print("\n--------Ordenando-----------")
+    heap.arrange(heap.heap)
+    heap.display_heap()
 
     print("\n---------Alteração de Prioridade--------")
     # 2. Alteração de Prioridade
@@ -75,8 +81,6 @@ def test_two():
     print("\n--------Get High Priority:--------")
     heap.get_high_priority()
 
-    heap.display_heap_graph()
-
 
 def test_three():
     data = [50, 40, 30, 20, 10, 5, 3]
@@ -89,6 +93,10 @@ def test_three():
     for value in data:
         print(f"Inserindo: {value}")
         heap.insert(value)
+
+    print("\n--------Ordenando-----------")
+    heap.arrange(heap.heap)
+    heap.display_heap()
 
     print("\n---------Alteração de Prioridade--------")
     # 2. Alteração de Prioridade
@@ -112,8 +120,6 @@ def test_three():
     print("\n--------Get High Priority:--------")
     heap.get_high_priority()
 
-    heap.display_heap_graph()
-
 
 def test_four():
     data = [13, 26, 19, 17, 24, 31, 22, 11, 8, 20, 5, 27, 18]
@@ -127,12 +133,16 @@ def test_four():
         print(f"Inserindo: {value}")
         heap.insert(value)
 
+    print("\n--------Ordenando-----------")
+    heap.arrange(heap.heap)
+    heap.display_heap()
+
     print("\n---------Alteração de Prioridade--------")
     # 2. Alteração de Prioridade
     print("Alterando prioridade do índice 7 para 35")
     heap.change_priority(7, 35)
     print("Alterando prioridade do índice 10 para 12")
-    heap.change_priority(10, 12)  
+    heap.change_priority(10, 12)
 
     print("\n--------Remoções:--------")
     # 3. Remoções - Remover três vezes consecutivas
@@ -148,5 +158,3 @@ def test_four():
     # 5. Exibir o elemento de maior prioridade
     print("\n--------Get High Priority:--------")
     heap.get_high_priority()
-
-    heap.display_heap_graph()
